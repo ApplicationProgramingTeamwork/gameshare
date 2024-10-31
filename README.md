@@ -8,7 +8,6 @@ pip install -r requirements.txt
 ```
 Then, create a `.env` file in the root directory with the following content
 ```shell
-# Apply Gemini API keys at https://ai.google.dev
 DATABASE_URL="postgresql://username:password@localhost:5432/gameshare"
 ```
 
