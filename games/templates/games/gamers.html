@@ -1,0 +1,12 @@
+{% extends 'games/base.html' %} {% block content %}
+<p>Gamers</p>
+<ul>
+  {% for gamer in gamers %}
+  <li>
+    <a href="{% url 'games:gamer' gamer.id %}">{{ gamer.usersname }}</a>
+  </li>
+  {% empty %}
+  <li>No gamers have been added yet.</li>
+  {% endfor %}
+</ul>
+{% endblock content %}

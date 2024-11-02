@@ -1,0 +1,24 @@
+{% extends 'games/base.html' %} {% block content %}
+<p>Gamer: {{ gamer.usersname }}</p>
+<p>Boardgames:</p>
+<ul>
+  {% for game in board_games %}
+  <li>
+    {{ game.name }} (Created on: {{ boardgame.created_at|date:'M d, Y H:i' }})
+  </li>
+  {% empty %}
+  <li>No boardgames available for this gamer yet.</li>
+  {% endfor %}
+</ul>
+<h2>Loans:</h2>
+<ul>
+  {% for loan in loans %}
+  <li>
+    {{ loan.board_game.name }} borrowed on {{ loan.loaned_at|date:"Y-m-d H:i" }}
+    to be returned by {{ loan.return_by|date:"Y-m-d H:i" }}
+  </li>
+  {% empty %}
+  <li>No loans available for this gamer yet.</li>
+  {% endfor %}
+</ul>
+{% endblock content %}
