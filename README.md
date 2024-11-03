@@ -10,8 +10,17 @@ Any gamer trying to borrow a fourth game simultaneously should be clearly inform
 ## Getting Started
 It is recommended to use a virtual environment to manage your dependencies. You can create and activate a virtual environment by running the following commands:
 ```shell
-python -m venv .venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+python -m .venv .venv
+```
+
+Activate the virtual environment on Macos/Linux
+```shell
+source .venv/bin/activate  
+```
+
+On Windows
+```shell
+.venv\Scripts\activate
 ```
 
 Once the virtual environment is activated, you can install the required dependencies:
