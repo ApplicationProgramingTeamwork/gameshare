@@ -1,7 +1,7 @@
 from django.contrib import admin
+from .models import Gamer,BoardGame,Loan
 
 # Register your models here.
-from .models import Gamer,BoardGame,Loan
 admin.site.register(Gamer)
 admin.site.register(BoardGame)
 admin.site.register(Loan)
