@@ -5,6 +5,7 @@ dj-database-url==2.3.0
 Django==5.1.2
 isort==5.13.2
 mccabe==0.7.0
+pillow==11.0.0
 platformdirs==4.3.6
 psycopg2-binary==2.9.10
 pylint==3.3.1
