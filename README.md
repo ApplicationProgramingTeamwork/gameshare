@@ -69,6 +69,8 @@ classDiagram
   BoardGame "1" --> "0..*" Loan : is borrowed by
 ```
 
+## TODO
+
 ### ⁠Backend Development and Model Design
 Task Leader A: Responsible for designing primary database models.
 Subtasks:
