@@ -33,7 +33,41 @@ Then, create a `.env` file in the root directory with the following content
 DATABASE_URL="postgresql://username:password@localhost:5432/gameshare"
 ```
 
-## TODO
+## UML
+```mermaid
+classDiagram
+  class Gamer {
+    CharField username
+    DateTimeField joined_date
+    ForeignKey owner
+    str __str__()
+    bool can_borrow()
+  }
+
+  class BoardGame {
+    CharField name
+    ForeignKey owner
+    CharField genre
+    TextField description
+    DateTimeField created_at
+    DateTimeField updated_at
+    ImageField image
+    str __str__()
+  }
+
+  class Loan {
+    ForeignKey board_game
+    ForeignKey gamer
+    DateTimeField loaned_at
+    DateTimeField return_by
+    str __str__()
+    bool is_overdue()
+  }
+
+  Gamer "1" --> "0..*" BoardGame : owns
+  Gamer "1" --> "0..*" Loan : borrows
+  BoardGame "1" --> "0..*" Loan : is borrowed by
+```
 
 ### ⁠Backend Development and Model Design
 Task Leader A: Responsible for designing primary database models.
