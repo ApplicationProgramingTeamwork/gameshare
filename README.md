@@ -156,3 +156,5 @@ More points can be earned by fulfilling the following requests:
 You can earn extra 2 points by managing the project’s source code and collaborative development in a Git repository.
 
 In case you not receiving full 20 points, you can try to get 1 to 2 points by using some libraries or implementing some functionalities that were not included in the book and lectures.
+
+
