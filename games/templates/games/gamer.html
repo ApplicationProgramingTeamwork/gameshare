@@ -4,7 +4,7 @@
 <ul>
   {% for game in board_games %}
   <li>
-    {{ game.name }} (Created on: {{ boardgame.created_at|date:'M d, Y H:i' }})
+    {{ game.name }} (Created on: {{ game.created_at|date:'M d, Y H:i' }})
   </li>
   {% empty %}
   <li>No boardgames available for this gamer yet.</li>

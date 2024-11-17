@@ -3,7 +3,7 @@
 <ul>
   {% for gamer in gamers %}
   <li>
-    <a href="{% url 'games:gamer' gamer.id %}">{{ gamer.usersname }}</a>
+    <a href="{% url 'games:gamer' gamer.id %}">{{ gamer.username }}</a>
   </li>
   {% empty %}
   <li>No gamers have been added yet.</li>
