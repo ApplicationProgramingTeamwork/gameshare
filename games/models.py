@@ -24,12 +24,14 @@ class BoardGame(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='boardgame_images/', blank=True, null=True)
-    
+    is_available = models.BooleanField(default=True)  
+
     class Meta:
         verbose_name_plural = 'boardgames'
 
     def __str__(self):
         return self.name
+
 
 # Loan model
 class Loan(models.Model):

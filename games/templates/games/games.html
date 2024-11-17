@@ -1,4 +1,5 @@
 {% extends 'games/base.html' %}
+
 {% block content %}
 <h1>Available Games</h1>
 <ul>
@@ -7,7 +8,7 @@
       <a href="{% url 'games:game_detail' game.id %}">{{ game.name }}</a>
       <p>Genre: {{ game.genre }}</p>
       <p>Description: {{ game.description }}</p>
-      <p>Owner: {{ game.owner.username }}</p> 
+      <p>Owner: {{ game.owner.username }}</p>
     </li>
   {% empty %}
     <li>No games available for rent right now.</li>
@@ -18,14 +19,20 @@
 <ul>
   {% for game in loaned_games %}
     <li>
-      <a href="{% url 'games:game_detail' game.id %}">{{ game.name }}</a>
+      <p>{{ game.name }}</p>
       <p>Genre: {{ game.genre }}</p>
       <p>Description: {{ game.description }}</p>
-      <p>Owner: {{ game.owner.username }}</p> 
+      <p>Owner: {{ game.owner.username }}</p>
 
-      {% for loan in game.loans.all %}
-        <p>Loaned to: {{ loan.gamer.username }} on {{ loan.loaned_at|date:"Y-m-d H:i" }} to be returned by {{ loan.return_by|date:"Y-m-d H:i" }}</p>
-      {% endfor %}
+      {% if game.loans.exists %}
+        {% with loan=game.loans.all|first %}
+          <p>Loaned to: {{ loan.gamer.username }}</p>
+          <p>Borrowed on: {{ loan.loaned_at|date:"Y-m-d H:i" }}</p>
+          <p>To be returned by: {{ loan.return_by|date:"Y-m-d H:i" }}</p>
+        {% endwith %}
+      {% else %}
+        <p>No current loans for this game.</p>
+      {% endif %}
     </li>
   {% empty %}
     <li>No games are currently loaned out.</li>
