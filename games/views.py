@@ -33,10 +33,13 @@ def gamer(request, gamer_id):
 # View for available and loaned games
 @login_required
 def games(request):
-    available_games = BoardGame.objects.filter(loans__isnull=True)
-    loaned_games = BoardGame.objects.filter(loans__returned=False).distinct()
+    available_games = BoardGame.objects.filter(is_available=True)  
+    loaned_games = BoardGame.objects.filter(is_available=False).distinct()  
+
     context = {'available_games': available_games, 'loaned_games': loaned_games}
     return render(request, 'games/games.html', context)
+
+
 
 
 
@@ -66,10 +69,12 @@ def create_loan(request, board_game_id):
     if request.method == 'POST':
         return_by_date = request.POST.get('return_by')
         Loan.objects.create(board_game=board_game, gamer=gamer, return_by=return_by_date)
+        board_game.is_available = False  
+        board_game.save()
         messages.success(request, "Loan created successfully.")
         return redirect('games:loan_success')
-
     return render(request, 'games/create_loan.html', {'board_game': board_game})
+
 
 
 # Loan success page view
@@ -145,7 +150,7 @@ def return_game(request, loan_id):
     loan.returned = True
     loan.returned_date = timezone.now()
     loan.save()
-    board_game.is_available = True
+    board_game.is_available = True  
     board_game.save()
     messages.success(request, f"The game {board_game.name} has been successfully returned and is now available for others.")
     return redirect('games:return_success')
