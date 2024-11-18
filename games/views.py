@@ -34,9 +34,11 @@ def gamer(request, gamer_id):
 @login_required
 def games(request):
     available_games = BoardGame.objects.filter(loans__isnull=True)
-    loaned_games = BoardGame.objects.filter(loans__isnull=False).distinct()
+    loaned_games = BoardGame.objects.filter(loans__returned=False).distinct()
     context = {'available_games': available_games, 'loaned_games': loaned_games}
     return render(request, 'games/games.html', context)
+
+
 
 
 # View for game details and loan
@@ -139,7 +141,17 @@ def delete_game(request, game_id):
 @login_required
 def return_game(request, loan_id):
     loan = get_object_or_404(Loan, id=loan_id, gamer__owner=request.user, returned=False)
+    board_game = loan.board_game
     loan.returned = True
     loan.returned_date = timezone.now()
     loan.save()
-    return redirect('games:profile')
+    board_game.is_available = True
+    board_game.save()
+    messages.success(request, f"The game {board_game.name} has been successfully returned and is now available for others.")
+    return redirect('games:return_success')
+
+
+
+@login_required
+def return_success(request):
+    return render(request, 'games/return_success.html')

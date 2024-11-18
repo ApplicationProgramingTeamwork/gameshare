@@ -14,5 +14,7 @@ urlpatterns = [
     path('add_game/', views.add_game, name='add_game'),
     path('edit_game/<int:game_id>/', views.edit_game, name='edit_game'),
     path('game/<int:game_id>/delete/', views.delete_game, name='delete_game'),
-    path('profile/', views.profile, name='profile'),  
+    path('games/<int:loan_id>/return/', views.return_game, name='return_game'),
+    path('profile/', views.profile, name='profile'),
+    path('games/return_success/', views.return_success, name='return_success'),  
 ]

@@ -1,0 +1,7 @@
+{% extends 'games/base.html' %}
+
+{% block content %}
+    <h2>Game Returned Successfully</h2>
+    <p>The game has been successfully returned. You can now go back to your profile or explore other games.</p>
+    <a href="{% url 'games:profile' %}">Go to Profile</a>
+{% endblock %}
