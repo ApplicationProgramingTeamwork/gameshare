@@ -1,0 +1,39 @@
+{% extends 'games/base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}</h1>
+
+<h2>Your Games</h2>
+<ul>
+    {% for game in games %}
+        <li>
+            <strong>{{ game.name }}</strong> - {{ game.genre }}
+            <br>
+            <a href="{% url 'games:edit_game' game.id %}">Edit</a> |
+            <a href="{% url 'games:delete_game' game.id %}">Delete</a>
+        </li>
+    {% empty %}
+        <p>You don't have any games yet. <a href="{% url 'games:add_game' %}">Add one now</a>.</p>
+    {% endfor %}
+</ul>
+
+<h2>Your Active Loans</h2>
+<ul>
+    {% for loan in active_loans %}
+        <li>
+            <strong>{{ loan.board_game.name }}</strong> - Return by {{ loan.return_by|date:"F d, Y" }}
+            <br>
+            <a href="{% url 'games:return_game' loan.id %}">Return Game</a>
+        </li>
+    {% empty %}
+        <p>You have no active loans.</p>
+    {% endfor %}
+</ul>
+
+<h2>Actions</h2>
+<ul>
+    <li><a href="{% url 'games:add_game' %}">Add New Game</a></li>
+</ul>
+{% endblock %}
