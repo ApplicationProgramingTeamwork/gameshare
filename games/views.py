@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .models import Gamer, BoardGame, Loan
 from .forms import BoardGameForm
+from django.db.models import Q
+
 
 
 # Home page view
@@ -33,11 +35,17 @@ def gamer(request, gamer_id):
 # View for available and loaned games
 @login_required
 def games(request):
-    available_games = BoardGame.objects.filter(is_available=True)  
-    loaned_games = BoardGame.objects.filter(is_available=False).distinct()  
+    available_games = BoardGame.objects.filter(
+        Q(loans__isnull=True) | Q(loans__returned=True)
+    ).distinct()
+
+    loaned_games = BoardGame.objects.filter(
+        loans__returned=False
+    ).distinct()
 
     context = {'available_games': available_games, 'loaned_games': loaned_games}
     return render(request, 'games/games.html', context)
+
 
 
 
@@ -48,7 +56,7 @@ def games(request):
 @login_required
 def game_detail(request, game_id):
     game = get_object_or_404(BoardGame, id=game_id)
-    is_available = not game.loans.exists() or game.loans.last().return_by < timezone.now()
+    is_available = game.is_available
     context = {'game': game, 'is_available': is_available}
     return render(request, 'games/game_detail.html', context)
 
@@ -144,14 +152,18 @@ def delete_game(request, game_id):
 
 # View to return a borrowed game
 @login_required
+@login_required
 def return_game(request, loan_id):
     loan = get_object_or_404(Loan, id=loan_id, gamer__owner=request.user, returned=False)
     board_game = loan.board_game
-    loan.returned = True
-    loan.returned_date = timezone.now()
+    
+    loan.returned = True  
+    loan.returned_date = timezone.now()  
     loan.save()
+
     board_game.is_available = True  
     board_game.save()
+
     messages.success(request, f"The game {board_game.name} has been successfully returned and is now available for others.")
     return redirect('games:return_success')
 
