@@ -12,7 +12,7 @@ def index(request):
 # View for listing all gamers
 @login_required
 def gamers(request):
-    gamers = Gamer.objects.order_by('joined_date')
+    gamers = Gamer.objects.order_by('joined_date') 
     context = {'gamers': gamers}
     return render(request, 'games/gamers.html', context)
 
@@ -24,6 +24,7 @@ def gamer(request, gamer_id):
     loans = gamer.loans.all()
     context = {'gamer': gamer, 'board_games': board_games, 'loans': loans}
     return render(request, 'games/gamer.html', context)
+
 
 # View for available and loaned games 
 @login_required
