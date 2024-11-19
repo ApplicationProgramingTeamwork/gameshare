@@ -7,38 +7,48 @@
 {% block content %}
   <h1>Profile</h1>
 
-  <h2 class="mb-0">Your Games</h2>
-  {% for game in games %}
-    <div class="flex items-center">
-      <img class="rounded-lg aspect-square size-16" alt="{{ game.name }}" src="{{ game.image.url }}" />
-      <div class="ml-4 flex-auto">
-        <div class="font-medium text-2xl">{{ game.name|default:'Anonymous' }}</div>
-        <div class="mt-1 text-slate-700">{{ game.genre }}</div>
+  <h2>Your Games</h2>
+  <div class="divide-y space-y-5">
+    {% for game in games %}
+      <div class="flex items-center pt-5">
+        {% if game.image %}
+          <img class="rounded-lg aspect-square size-16 m-0" alt="{{ game.name }}" src="{{ game.image.url }}" />
+        {% else %}
+          <div class="rounded-lg aspect-square size-16 m-0 bg-slate-200"></div>
+        {% endif %}
+        <div class="ml-4 flex-auto">
+          <div class="font-medium text-2xl">{{ game.name|default:'Anonymous' }}</div>
+          <div class="mt-1 text-slate-700">{{ game.genre }}</div>
+        </div>
+        <div class="space-x-1">
+          <a class="button" href="{% url 'games:edit_game' game.id %}">Edit</a>
+          <a class="button" href="{% url 'games:delete_game' game.id %}">Delete</a>
+        </div>
       </div>
-      <div class="space-x-1">
-        <a class="button" href="{% url 'games:edit_game' game.id %}">Edit</a>
-        <a class="button" href="{% url 'games:delete_game' game.id %}">Delete</a>
+    {% empty %}
+      <p>
+        You don't have any games yet. <a href="{% url 'games:add_game' %}">Add one now</a>.
+      </p>
+    {% endfor %}
+  </div>
+  <br />
+  <a class="button" href="{% url 'games:add_game' %}">Add one now</a>
+
+  <h2>Your Active Loans</h2>
+  <div class="divide-y space-y-5">
+    {% for loan in active_loans %}
+      <div class="flex items-center pt-5">
+        <img class="rounded-lg aspect-square size-16 m-0" alt="{{ loan.board_game.name }}" src="{{ loan.board_game.image.url }}" />
+        <div class="ml-4 flex-auto">
+          <div class="font-medium text-2xl">{{ loan.board_game.name|default:'Anonymous' }}</div>
+          <div class="mt-1 text-slate-700">Return by {{ loan.board_game.genre }}</div>
+        </div>
+        <div>
+          <a class="button" href="{% url 'games:return_game' loan.id %}">Return Game</a>
+        </div>
       </div>
-    </div>
-    <a class="button" href="{% url 'games:add_game' %}">Add one now</a>
-  {% empty %}
-    <p>
-      You don't have any games yet. <a href="{% url 'games:add_game' %}">Add one now</a>.
-    </p>
-  {% endfor %}
-  <h2 class="mb-0">Your Active Loans</h2>
-  {% for loan in active_loans %}
-    <div class="flex items-center">
-      <img class="rounded-lg aspect-square size-16" alt="{{ loan.board_game.name }}" src="{{ loan.board_game.image.url }}" />
-      <div class="ml-4 flex-auto">
-        <div class="font-medium text-2xl">{{ loan.board_game.name|default:'Anonymous' }}</div>
-        <div class="mt-1 text-slate-700">Return by {{ loan.board_game.genre }}</div>
-      </div>
-      <div>
-        <a class="button" href="{% url 'games:return_game' loan.id %}">Return Game</a>
-      </div>
-    </div>
-  {% empty %}
-    <p>You have no active loans.</p>
-  {% endfor %}
+    {% empty %}
+      <p>You have no active loans.</p>
+    {% endfor %}
+  </div>
 {% endblock %}

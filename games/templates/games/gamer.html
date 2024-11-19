@@ -1,23 +1,36 @@
 {% extends 'games/base.html' %} {% block content %}
-<p>Gamer: {{ gamer.usersname }}</p>
-<p>Boardgames:</p>
-<ul>
-  {% for game in board_games %}
-  <li>
-    {{ game.name }} (Created on: {{ game.created_at|date:'M d, Y H:i' }})
-  </li>
-  {% empty %}
-  <li>No boardgames available for this gamer yet.</li>
-  {% endfor %}
-</ul>
-<h2>Loans:</h2>
-<ul>
-  {% for loan in loans %}
-  <li>
-    {{ loan.board_game.name }} borrowed on {{ loan.loaned_at|date:"Y-m-d H:i" }}
-  </li>
-  {% empty %}
-  <li>No loans available for this gamer yet.</li>
-  {% endfor %}
-</ul>
-{% endblock content %}
+  <h1>{{ gamer }}</h1>
+  <h2>Boardgames</h2>
+  <div class="divide-y space-y-5">
+    {% for game in board_games %}
+      <div class="flex items-center pt-5">
+        {% if game.image %}
+          <img class="rounded-lg aspect-square size-16 m-0" alt="{{ game.name }}" src="{{ game.image.url }}" />
+        {% else %}
+          <div class="rounded-lg aspect-square size-16 m-0 bg-slate-200"></div>
+        {% endif %}
+        <div class="ml-4 flex-auto">
+          <div class="font-medium text-2xl">{{ game.name|default:'Anonymous' }}</div>
+          <div class="mt-1 text-slate-700">{{ game.genre }}</div>
+        </div>
+        <div class="space-x-1">{{ game.created_at|date:'M d, Y' }}</div>
+      </div>
+    {% empty %}
+      <p>No boardgames available for this gamer yet.</p>
+    {% endfor %}
+  </div>
+  <h2>Loans</h2>
+  <ul>
+    {% for loan in loans %}
+      <li>
+        <b>{{ loan.board_game.name }}</b> borrowed on {{ loan.loaned_at|date:'Y-m-d H:i' }}
+
+        {% if loan.returned %}
+          <span class="bg-green-600 text-white rounded-full px-2 ml-2">Returned</span>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li>No loans available for this gamer yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
