@@ -20,7 +20,7 @@
               </svg>
               {{ game.owner.username|default:'Anonymous' }}
               {% if game.is_available == False %}
-                <span class="bg-black/50 text-white rounded-full px-2 ml-2">Unavailable</span>
+                <span class="bg-yellow-500 text-white rounded-full px-2 ml-2">Unavailable</span>
               {% endif %}
             </div>
           </div>

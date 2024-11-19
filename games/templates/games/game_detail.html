@@ -1,15 +1,21 @@
 {% extends 'games/base.html' %}
 
 {% block content %}
-  <h1>{{ game.name }}</h1>
-  <p>{{ game.genre }}</p>
+  <div class="flex gap-5">
+    {% if game.image %}
+      <img class="rounded-lg aspect-square size-20 m-0" alt="{{ game.name }}" src="{{ game.image.url }}" />
+    {% endif %}
+    <div>
+      <h1 class="mb-1">{{ game.name }}</h1>
+      <p class="mt-0 text-2xl font-thin">{{ game.genre }}</p>
+    </div>
+  </div>
   <p>{{ game.description }}</p>
-  <p>Created on: {{ game.created_at|date:'F j, Y' }}</p>
 
   {% if game.is_available == False %}
-    <p>This game is currently borrowed. You can reserve it for the next available date.</p>
+    <p class="text-yellow-600 font-bold">This game is currently borrowed. You can reserve it for the next available date.</p>
   {% elif gamer.can_borrow == False %}
-    <p>You have reached the maximum limit of 3 borrowed games. Please return a game before borrowing another.</p>
+    <p class="text-yellow-600 font-bold">You have reached the maximum limit of 3 borrowed games. Please return a game before borrowing another.</p>
   {% else %}
     <form method="post" action="{% url 'games:create_loan' game.id %}">
       {% csrf_token %}
