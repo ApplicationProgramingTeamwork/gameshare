@@ -1,41 +1,32 @@
 {% extends 'games/base.html' %}
-
 {% block content %}
-<h1>Available Games</h1>
-<ul>
-  {% for game in available_games %}
-    <li>
-      <a href="{% url 'games:game_detail' game.id %}">{{ game.name }}</a>
-      <p>Genre: {{ game.genre }}</p>
-      <p>Description: {{ game.description }}</p>
-      <p>Owner: {{ game.owner.username }}</p>
-    </li>
-  {% empty %}
-    <li>No games available for rent right now.</li>
-  {% endfor %}
-</ul>
-
-<h1>Loaned Games</h1>
-<ul>
-  {% for game in loaned_games %}
-    <li>
-      <p>{{ game.name }}</p>
-      <p>Genre: {{ game.genre }}</p>
-      <p>Description: {{ game.description }}</p>
-      <p>Owner: {{ game.owner.username }}</p>
-
-      {% if game.loans.exists %}
-        {% with loan=game.loans.all|first %}
-          <p>Loaned to: {{ loan.gamer.username }}</p>
-          <p>Borrowed on: {{ loan.loaned_at|date:"Y-m-d H:i" }}</p>
-          <p>To be returned by: {{ loan.return_by|date:"Y-m-d H:i" }}</p>
-        {% endwith %}
-      {% else %}
-        <p>No current loans for this game.</p>
-      {% endif %}
-    </li>
-  {% empty %}
-    <li>No games are currently loaned out.</li>
-  {% endfor %}
-</ul>
+  <div class="divide-y divide-slate-400/20 space-y-5">
+    {% for game in games %}
+      <div class="pt-5">
+        <div class="no-underline flex gap-5">
+          {% if game.image %}
+            <img class="bg-slate-100 object-cover aspect-square m-0 rounded-lg w-36 min-w-36 overflow-hidden border-none" loading="lazy" decoding="async" alt="{{ game.name }}" src="{{ game.image.url }}" />
+          {% else %}
+            <div class="bg-slate-100 object-cover aspect-square m-0 rounded-lg w-36 min-w-36 overflow-hidden border-none"></div>
+          {% endif %}
+          <div class="flex flex-col py-1 flex-1 gap-1 overflow-hidden">
+            <div class="truncate text-2xl font-bold">{{ game.name }}</div>
+            <div class="truncate font-thin">{{ game.genre }}</div>
+            <div class="truncate flex-1 text-black/30 max-h-16">{{ game.description }}</div>
+            <div class="truncate flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              {{ game.owner.username|default:'Anonymous' }}
+              {% if game.is_available == False %}
+                <span class="bg-black/50 text-white rounded-full px-2 ml-2">Unavailable</span>
+              {% endif %}
+            </div>
+          </div>
+          <a class="no-underline self-center" href="{% url 'games:game_detail' game.id %}"><div class="pointer-events-auto ml-4 flex-none rounded-md px-2 py-[0.3125rem] font-medium text-slate-700 shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50">View</div></a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}

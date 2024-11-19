@@ -15,7 +15,6 @@
   {% for loan in loans %}
   <li>
     {{ loan.board_game.name }} borrowed on {{ loan.loaned_at|date:"Y-m-d H:i" }}
-    to be returned by {{ loan.return_by|date:"Y-m-d H:i" }}
   </li>
   {% empty %}
   <li>No loans available for this gamer yet.</li>

@@ -1,12 +1,19 @@
-{% extends 'games/base.html' %} {% block content %}
-<p>Gamers</p>
-<ul>
-  {% for gamer in gamers %}
-  <li>
-    <a href="{% url 'games:gamer' gamer.id %}">{{ gamer.username }}</a>
-  </li>
-  {% empty %}
-  <li>No gamers have been added yet.</li>
-  {% endfor %}
-</ul>
-{% endblock content %}
+{% extends 'games/base.html' %}
+{% block content %}
+  <div class="divide-y divide-slate-400/20">
+    {% for gamer in gamers %}
+      <div class="flex items-center p-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-12">
+          <circle cx="12" cy="12" r="10" />
+          <circle cx="12" cy="10" r="3" />
+          <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+        </svg>
+        <div class="ml-4 flex-auto">
+          <div class="font-medium text-lg">{{ gamer.username|default:'Anonymous' }}</div>
+          <div class="mt-1 text-slate-700">@{{ gamer.id }}</div>
+        </div>
+        <a class="no-underline" href="{% url 'games:gamer' gamer.id %}"><div class="pointer-events-auto ml-4 flex-none rounded-md px-2 py-[0.3125rem] font-medium text-slate-700 shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50">View</div></a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,39 +1,44 @@
 {% extends 'games/base.html' %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}
+  Profile
+{% endblock %}
 
 {% block content %}
-<h1>Welcome, {{ user.username }}</h1>
+  <h1>Profile</h1>
 
-<h2>Your Games</h2>
-<ul>
-    {% for game in games %}
-        <li>
-            <strong>{{ game.name }}</strong> - {{ game.genre }}
-            <br>
-            <a href="{% url 'games:edit_game' game.id %}">Edit</a> |
-            <a href="{% url 'games:delete_game' game.id %}">Delete</a>
-        </li>
-    {% empty %}
-        <p>You don't have any games yet. <a href="{% url 'games:add_game' %}">Add one now</a>.</p>
-    {% endfor %}
-</ul>
-
-<h2>Your Active Loans</h2>
-<ul>
-    {% for loan in active_loans %}
-        <li>
-            <strong>{{ loan.board_game.name }}</strong> - Return by {{ loan.return_by|date:"F d, Y" }}
-            <br>
-            <a href="{% url 'games:return_game' loan.id %}">Return Game</a>
-        </li>
-    {% empty %}
-        <p>You have no active loans.</p>
-    {% endfor %}
-</ul>
-
-<h2>Actions</h2>
-<ul>
-    <li><a href="{% url 'games:add_game' %}">Add New Game</a></li>
-</ul>
+  <h2 class="mb-0">Your Games</h2>
+  {% for game in games %}
+    <div class="flex items-center">
+      <img class="rounded-lg aspect-square size-16" alt="{{ game.name }}" src="{{ game.image.url }}" />
+      <div class="ml-4 flex-auto">
+        <div class="font-medium text-2xl">{{ game.name|default:'Anonymous' }}</div>
+        <div class="mt-1 text-slate-700">{{ game.genre }}</div>
+      </div>
+      <div class="space-x-1">
+        <a class="button" href="{% url 'games:edit_game' game.id %}">Edit</a>
+        <a class="button" href="{% url 'games:delete_game' game.id %}">Delete</a>
+      </div>
+    </div>
+    <a class="button" href="{% url 'games:add_game' %}">Add one now</a>
+  {% empty %}
+    <p>
+      You don't have any games yet. <a href="{% url 'games:add_game' %}">Add one now</a>.
+    </p>
+  {% endfor %}
+  <h2 class="mb-0">Your Active Loans</h2>
+  {% for loan in active_loans %}
+    <div class="flex items-center">
+      <img class="rounded-lg aspect-square size-16" alt="{{ loan.board_game.name }}" src="{{ loan.board_game.image.url }}" />
+      <div class="ml-4 flex-auto">
+        <div class="font-medium text-2xl">{{ loan.board_game.name|default:'Anonymous' }}</div>
+        <div class="mt-1 text-slate-700">Return by {{ loan.board_game.genre }}</div>
+      </div>
+      <div>
+        <a class="button" href="{% url 'games:return_game' loan.id %}">Return Game</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>You have no active loans.</p>
+  {% endfor %}
 {% endblock %}

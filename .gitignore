@@ -25,7 +25,6 @@ venv/
 *.pyc
 db.sqlite3
 media/
-static/
 local_settings.py
 
 # IDE
@@ -50,3 +49,5 @@ Thumbs.db
 .env.development.local
 .env.test.local
 .env.production.local
+
+tailwind.config.js

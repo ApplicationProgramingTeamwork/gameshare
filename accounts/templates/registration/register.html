@@ -1,8 +1,13 @@
-{% extends "games/base.html" %}
+{% extends 'games/base.html' %}
 {% block content %}
- <form action="{% url 'accounts:register' %}" method='post'>
- {% csrf_token %}
- {{ form.as_div }}
- <button name="submit">Register</button>
- </form>
-{% endblock content %}
+  <div class="flex flex-col justify-center items-center mt-10">
+    <div style="width: 500px;">
+      <form action="{% url 'accounts:register' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <br />
+        <button class="w-full" name="submit">Register</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

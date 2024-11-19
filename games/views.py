@@ -4,8 +4,6 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .models import Gamer, BoardGame, Loan
 from .forms import BoardGameForm
-from django.db.models import Q
-
 
 
 # Home page view
@@ -35,21 +33,10 @@ def gamer(request, gamer_id):
 # View for available and loaned games
 @login_required
 def games(request):
-    available_games = BoardGame.objects.filter(
-        Q(loans__isnull=True) | Q(loans__returned=True)
-    ).distinct()
-
-    loaned_games = BoardGame.objects.filter(
-        loans__returned=False
-    ).distinct()
-
-    context = {'available_games': available_games, 'loaned_games': loaned_games}
+    gamer = Gamer.objects.get(owner=request.user)
+    games = BoardGame.objects.exclude(owner=gamer)
+    context = {'games': games}
     return render(request, 'games/games.html', context)
-
-
-
-
-
 
 
 # View for game details and loan
@@ -68,21 +55,21 @@ def create_loan(request, board_game_id):
     gamer, created = Gamer.objects.get_or_create(owner=request.user)
 
     if created:
-        messages.info(request, "Your Gamer profile has been created automatically.")
+        messages.info(
+            request, "Your Gamer profile has been created automatically.")
 
     if not gamer.can_borrow():
-        messages.error(request, "You have reached the maximum limit of 3 borrowed games. Please return a game before borrowing another.")
+        messages.error(
+            request, "You have reached the maximum limit of 3 borrowed games. Please return a game before borrowing another.")
         return redirect('games:index')
 
     if request.method == 'POST':
-        return_by_date = request.POST.get('return_by')
-        Loan.objects.create(board_game=board_game, gamer=gamer, return_by=return_by_date)
-        board_game.is_available = False  
+        Loan.objects.create(board_game=board_game, gamer=gamer)
+        board_game.is_available = False
         board_game.save()
         messages.success(request, "Loan created successfully.")
         return redirect('games:loan_success')
     return render(request, 'games/create_loan.html', {'board_game': board_game})
-
 
 
 # Loan success page view
@@ -107,7 +94,8 @@ def profile(request):
     games = BoardGame.objects.filter(owner__owner=user)
     loans = Loan.objects.filter(gamer__owner=user)
     active_loans = loans.filter(returned=False)
-    context = {'user': user, 'games': games, 'loans': loans, 'active_loans': active_loans}
+    context = {'user': user, 'games': games,
+               'loans': loans, 'active_loans': active_loans}
     return render(request, 'games/profile.html', context)
 
 
@@ -115,7 +103,7 @@ def profile(request):
 @login_required
 def add_game(request):
     if request.method == 'POST':
-        form = BoardGameForm(request.POST)
+        form = BoardGameForm(request.POST, request.FILES)
         if form.is_valid():
             game = form.save(commit=False)
             game.owner = Gamer.objects.get(owner=request.user)
@@ -131,7 +119,7 @@ def add_game(request):
 def edit_game(request, game_id):
     game = get_object_or_404(BoardGame, id=game_id, owner__owner=request.user)
     if request.method == 'POST':
-        form = BoardGameForm(request.POST, instance=game)
+        form = BoardGameForm(request.POST, request.FILES, instance=game)
         if form.is_valid():
             form.save()
             return redirect('games:profile')
@@ -154,19 +142,20 @@ def delete_game(request, game_id):
 @login_required
 @login_required
 def return_game(request, loan_id):
-    loan = get_object_or_404(Loan, id=loan_id, gamer__owner=request.user, returned=False)
+    loan = get_object_or_404(
+        Loan, id=loan_id, gamer__owner=request.user, returned=False)
     board_game = loan.board_game
-    
-    loan.returned = True  
-    loan.returned_date = timezone.now()  
+
+    loan.returned = True
+    loan.returned_date = timezone.now()
     loan.save()
 
-    board_game.is_available = True  
+    board_game.is_available = True
     board_game.save()
 
-    messages.success(request, f"The game {board_game.name} has been successfully returned and is now available for others.")
+    messages.success(request, f"The game {
+                     board_game.name} has been successfully returned and is now available for others.")
     return redirect('games:return_success')
-
 
 
 @login_required

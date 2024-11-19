@@ -1,44 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {% load static %}  
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}GameShare{% endblock %}</title>
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        GameShare
+      {% endblock %}
+    </title>
 
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'games:index' %}">Home</a></li>
-                <li><a href="{% url 'games:games' %}">Games</a></li>
-                <li><a href="{% url 'games:gamers' %}">Gamers</a></li>
-                
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'games:profile' %}">Profile</a></li>
-                    <li>
-                      <form method="post" action="{% url 'accounts:logout' %}">
-                        {% csrf_token %}
-                        <button type="submit">Logout</button>
-                      </form>                    
-                    </li>
-                {% else %}
-                  <li><a href="{% url 'accounts:login' %}">Login</a></li>
-                  <li><a href="{% url 'accounts:register' %}">Register</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <style type="text/tailwindcss">
+      .button {
+        @apply bg-black text-white shadow rounded-full px-5 py-2 no-underline;
+      }
+      form > div > label {
+        @apply block;
+      }
+      form > div {
+        @apply flex flex-col;
+      }
+      form > button {
+        @apply button;
+      }
+      form input,
+      textarea,
+      select {
+        @apply !rounded !border-black/30;
+      }
+      form {
+        @apply space-y-4;
+      }
+      .nav-btn {
+        @apply px-6 py-2 no-underline rounded-full;
+      }
+      .active {
+        @apply bg-black text-white;
+      }
+    </style>
+  </head>
+  <body class="prose mx-auto flex flex-col min-h-screen">
+    <form method="post" action="{% url 'accounts:logout' %}" hidden>
+      {% csrf_token %}
+      <button id="logout_button" type="submit">Logout</button>
+    </form>
+    {% if user.is_authenticated %}
+      <header class="sticky top-0 flex gap-5 justify-center py-6 bg-white z-10 mb-5">
+        <a class="nav-btn {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'games:index' %}">HOME</a>
+        <a class="nav-btn {% if request.resolver_match.url_name == 'games' %}active{% endif %}" href="{% url 'games:games' %}">GAMES</a>
+        <a class="nav-btn {% if request.resolver_match.url_name == 'gamers' %}active{% endif %}" href="{% url 'games:gamers' %}">GAMERS</a>
+        <a class="nav-btn {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'games:profile' %}">PROFILE</a>
+      </header>
+      <div class="fixed top-5 right-10">
+        <div class="flex justify-center gap-2">
+          <a href="#" onclick="logout_button.click()">Logout</a>
+        </div>
+      </div>
+    {% endif %}
 
-    <main>
-        {% block content %}
-        {% endblock %}
+    <main class="flex-1">
+      {% block content %}
+
+      {% endblock %}
     </main>
 
     <footer>
-        <p>&copy; 2024 GameShare</p>
+      <p class="text-center">&copy; 2024 GameShare</p>
     </footer>
-</body>
+  </body>
 </html>

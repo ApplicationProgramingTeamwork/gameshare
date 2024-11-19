@@ -2,8 +2,6 @@
 <h1>Borrow a Board Game</h1>
 <form method="POST">
   {% csrf_token %}
-  <label for="return_by">Return by:</label>
-  <input type="datetime-local" name="return_by" required />
   <button type="submit">Borrow Game</button>
 </form>
 {% endblock content %}

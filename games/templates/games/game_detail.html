@@ -1,19 +1,17 @@
 {% extends 'games/base.html' %}
 
 {% block content %}
-<h1>{{ game.name }}</h1>
-<p>Genre: {{ game.genre }}</p>
-<p>Description: {{ game.description }}</p>
-<p>Created on: {{ game.created_at|date:"F j, Y" }}</p>
+  <h1>{{ game.name }}</h1>
+  <p>{{ game.genre }}</p>
+  <p>{{ game.description }}</p>
+  <p>Created on: {{ game.created_at|date:'F j, Y' }}</p>
 
-{% if is_available %}
-  <form method="post" action="{% url 'games:create_loan' game.id %}">
-    {% csrf_token %}
-    <label for="return_by">Return by:</label>
-    <input type="date" id="return_by" name="return_by" required>
-    <button type="submit">Borrow this game</button>
-  </form>
-{% else %}
-  <p>This game is currently borrowed. You can reserve it for the next available date.</p>
-{% endif %}
+  {% if is_available %}
+    <form method="post" action="{% url 'games:create_loan' game.id %}">
+      {% csrf_token %}
+      <button type="submit">Borrow this game</button>
+    </form>
+  {% else %}
+    <p>This game is currently borrowed. You can reserve it for the next available date.</p>
+  {% endif %}
 {% endblock %}

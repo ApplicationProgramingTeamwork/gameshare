@@ -59,9 +59,7 @@ classDiagram
     ForeignKey board_game
     ForeignKey gamer
     DateTimeField loaned_at
-    DateTimeField return_by
     str __str__()
-    bool is_overdue()
   }
 
   Gamer "1" --> "0..*" BoardGame : owns

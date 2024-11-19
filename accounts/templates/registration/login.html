@@ -1,12 +1,16 @@
 {% extends 'games/base.html' %}
 {% block content %}
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.
-</p>
-{% endif %}
-<form action="{% url 'accounts:login' %}" method='post'>
-{% csrf_token %}
-{{ form.as_div }}
-<button name="submit">Log in</button>
-</form>
-{% endblock content %}
+  <div class="flex flex-col justify-center items-center" style="margin-top: 30vh;">
+    <div class="w-96">
+      {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+      {% endif %}
+      <form action="{% url 'accounts:login' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <a href="{% url 'accounts:register' %}">Register</a>
+        <button class="w-full" name="submit">Log in</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
