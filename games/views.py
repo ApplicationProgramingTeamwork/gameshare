@@ -42,9 +42,9 @@ def games(request):
 # View for game details and loan
 @login_required
 def game_detail(request, game_id):
+    gamer = Gamer.objects.get(owner=request.user)
     game = get_object_or_404(BoardGame, id=game_id)
-    is_available = game.is_available
-    context = {'game': game, 'is_available': is_available}
+    context = {'game': game, 'gamer': gamer}
     return render(request, 'games/game_detail.html', context)
 
 

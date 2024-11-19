@@ -10,7 +10,7 @@
         </svg>
         <div class="ml-4 flex-auto">
           <div class="font-medium text-lg">{{ gamer.username|default:'Anonymous' }}</div>
-          <div class="mt-1 text-slate-700">@{{ gamer.id }}</div>
+          <div class="mt-1 text-slate-700">Have reached {{ gamer.borrowed_games.count }} games</div>
         </div>
         <a class="no-underline" href="{% url 'games:gamer' gamer.id %}"><div class="pointer-events-auto ml-4 flex-none rounded-md px-2 py-[0.3125rem] font-medium text-slate-700 shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50">View</div></a>
       </div>

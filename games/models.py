@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from django.conf import settings
 
 # Gamer model
@@ -15,9 +14,13 @@ class Gamer(models.Model):
     def __str__(self):
         return f'{self.username}'
 
+    def borrowed_games(self):
+        """Return the games borrowed by the gamer."""
+        return self.loans.filter(returned=False)
+
     def can_borrow(self):
         """Return True if the gamer can borrow a new game (maximum 3 games)."""
-        return self.loans.count() < 3
+        return self.loans.filter(returned=False).count() < 3
 
 # BoardGame model
 
@@ -59,4 +62,3 @@ class Loan(models.Model):
 
     class Meta:
         ordering = ['-loaned_at']
-        
