@@ -19,7 +19,9 @@
         <b>{{ loan.board_game.name }}</b> borrowed on {{ loan.loaned_at|date:'Y-m-d H:i' }}
 
         {% if loan.returned %}
-          <span class="bg-green-600 text-white rounded-full px-2 ml-2">Returned</span>
+          <span class="bg-green-500 text-white rounded-full px-2 py-1 ml-2 text-sm">Returned</span>
+        {% else %}
+          <span class="bg-yellow-500 text-white rounded-full px-2 py-1 ml-2 text-sm">Loaned</span>
         {% endif %}
       </li>
     {% empty %}
