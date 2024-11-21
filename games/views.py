@@ -34,8 +34,8 @@ def gamer(request, gamer_id):
 @login_required
 def games(request):
     gamer = Gamer.objects.get(owner=request.user)
-    games = BoardGame.objects.exclude(owner=gamer)
-    context = {'games': games}
+    games = BoardGame.objects.exclude()
+    context = {'games': games, 'gamer': gamer}
     return render(request, 'games/games.html', context)
 
 

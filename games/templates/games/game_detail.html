@@ -31,6 +31,8 @@
 
   {% if game.is_available == False %}
     <p class="text-yellow-600 font-bold">This game is currently borrowed. You can reserve it for the next available date.</p>
+  {% elif game.owner == gamer %}
+    <p class="text-yellow-600 font-bold">This is your game, you do not need to borrow it.</p>
   {% elif gamer.can_borrow == False %}
     <p class="text-yellow-600 font-bold">You have reached the maximum limit of 3 borrowed games. Please return a game before borrowing another.</p>
   {% else %}

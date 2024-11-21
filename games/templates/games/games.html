@@ -19,6 +19,10 @@
                 <circle cx="12" cy="7" r="4" />
               </svg>
               {{ game.owner.username|default:'Anonymous' }}
+
+              {% if game.owner == gamer %}
+                <span class="bg-sky-500 text-white rounded-full px-2 ml-2">Yours</span>
+              {% endif %}
               {% if game.is_available == False %}
                 <span class="bg-yellow-500 text-white rounded-full px-2 ml-2">Loaned</span>
               {% endif %}
